@@ -335,8 +335,6 @@ const RegistrationScreen = ({ navigation }) => {
         Keyboard.dismiss();
         if (firstName.trim() == "") {
             Toast.show({ description: t("Please enter First Name") });
-        } else if (lastName.trim() == "") {
-            Toast.show({ description: t("Please enter Last Name") });
         } else if (mobile.trim() == "") {
             Toast.show({ description: t("Please enter Monile Number") });
         } else if (gender == "") {
@@ -908,7 +906,7 @@ const RegistrationScreen = ({ navigation }) => {
                                     <Input size="lg" value={middleName} readOnly onChangeText={(text) => setMiddleName(text)} variant="unstyled" InputLeftElement={<Icon name="person-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("Middle Name")} />
                                 </View>
                                 <View style={styles.inputbox}>
-                                    <Input size="lg" value={lastName} readOnly onChangeText={(text) => setLastName(text)} variant="unstyled" InputLeftElement={<Icon name="person-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("Last Name") + " *"} />
+                                    <Input size="lg" value={lastName} readOnly onChangeText={(text) => setLastName(text)} variant="unstyled" InputLeftElement={<Icon name="person-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("Last Name")} />
                                 </View>
                                 <View style={styles.inputbox}>
                                     <Input size="lg" value={mobile} readOnly onChangeText={(text) => setMobile(text)} keyboardType='number-pad' maxLength={10} variant="unstyled" InputLeftElement={<Icon name="phone-portrait-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("Mobile") + " *"} />
