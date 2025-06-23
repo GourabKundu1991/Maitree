@@ -130,9 +130,6 @@ const UpdateKYCScreen = ({ navigation, route }) => {
                     .then((responseJson) => {
                         console.log("ekyc_documents:", JSON.stringify(responseJson));
                         if (responseJson.status == 'success') {
-                            setAadhaarCard(responseJson.contact_details.adhar_number);
-                            setPanCard(responseJson.contact_details.pan_card_number);
-                            setGstCard(responseJson.contact_details.gst_code);
                             setAddress1(responseJson.address_details.line1);
                             setAddress2(responseJson.address_details.line2);
                             setAddress3(responseJson.address_details.line3);
@@ -146,10 +143,18 @@ const UpdateKYCScreen = ({ navigation, route }) => {
 
                             if (responseJson.aadhaar_details != "") {
                                 setIsAadhaarView(false);
-                            } else if (responseJson.pan_details != "") {
+                            } else {
+                                setAadhaarCard(responseJson.contact_details.adhar_number);
+                            }
+                            if (responseJson.pan_details != "") {
                                 setIsPanView(false);
-                            } else if (responseJson.gst_details != "") {
+                            } else {
+                                setPanCard(responseJson.contact_details.pan_card_number);
+                            }
+                            if (responseJson.gst_details != "") {
                                 setIsGstView(false);
+                            } else {
+                                setGstCard(responseJson.contact_details.gst_code);
                             }
                         } else {
                             Toast.show({ description: responseJson.message });
@@ -183,7 +188,6 @@ const UpdateKYCScreen = ({ navigation, route }) => {
                 formdata.append("APIkey", `${API_KEY}`);
                 formdata.append("os_type", `${OS_TYPE}`);
                 formdata.append("state_id", stateId);
-                console.log("test");
                 fetch(`${BASE_URL}/GetCityWithStateIDList`, {
                     method: 'POST',
                     headers: {
@@ -283,13 +287,13 @@ const UpdateKYCScreen = ({ navigation, route }) => {
             Toast.show({ description: t("Please attach Aadhaar Front Image") });
         } else if (isAadhaarView && aadhaarCard.trim() != "" && aadhaarBackImage == "") {
             Toast.show({ description: t("Please attach Aadhaar Back Image") });
-        } else if (!isAadhaarView && panCard.trim() == "") {
+        } else if (isPanView && panCard.trim() == "") {
             Toast.show({ description: t("Please enter PAN Card Number") });
-        } else if (panCard.trim() != "" && panImage == "") {
+        } else if (isPanView && panCard.trim() != "" && panImage == "") {
             Toast.show({ description: t("Please Attach PAN Image") });
-        } else if (!isGstView && gstCard.trim() == "") {
+        } else if (isGstView && gstCard.trim() == "") {
             Toast.show({ description: t("Please enter GST Card Number") });
-        } else if (gstCard.trim() != "" && gstImage == "") {
+        } else if (isGstView && gstCard.trim() != "" && gstImage == "") {
             Toast.show({ description: t("Please Attach GST Image") });
         } else {
             onSubmit();
@@ -323,6 +327,7 @@ const UpdateKYCScreen = ({ navigation, route }) => {
                     formdata.append("gstNo", gstCard);
                     formdata.append("gstImage", gstImage);
                     formdata.append("contactHierId", "");
+                    console.log(formdata)
                     fetch(`${BASE_URL}/ekyc_recapture`, {
                         method: 'POST',
                         headers: {
@@ -419,7 +424,7 @@ const UpdateKYCScreen = ({ navigation, route }) => {
                             <Box style={styles.productbox}>
                                 <Text color={darkColor} fontSize="16" fontWeight="bold" textAlign="center" mb="4" pb="3" borderColor="#bbbbbb" borderBottomWidth={1}>{t("PAN Details")}</Text>
                                 <View style={styles.inputbox}>
-                                    <Input size="lg" value={panCard} onChangeText={(text) => setPanCard(text)} variant="unstyled" maxLength={10} InputLeftElement={<Icon name="card-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("PAN Card No.") + " *"} />
+                                    <Input size="lg" readOnly value={panCard} onChangeText={(text) => setPanCard(text)} variant="unstyled" maxLength={10} InputLeftElement={<Icon name="card-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("PAN Card No.") + " *"} />
                                 </View>
                                 {panCard != "" && (
                                     <View>
@@ -441,7 +446,7 @@ const UpdateKYCScreen = ({ navigation, route }) => {
                             <Box style={styles.productbox}>
                                 <Text color={darkColor} fontSize="16" fontWeight="bold" textAlign="center" mb="4" pb="3" borderColor="#bbbbbb" borderBottomWidth={1}>{t("GST Details")}</Text>
                                 <View style={styles.inputbox}>
-                                    <Input size="lg" value={gstCard} onChangeText={(text) => setGstCard(text)} variant="unstyled" maxLength={10} InputLeftElement={<Icon name="card-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("GST Card No.") + " *"} />
+                                    <Input size="lg" readOnly value={gstCard} onChangeText={(text) => setGstCard(text)} variant="unstyled" maxLength={10} InputLeftElement={<Icon name="card-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("GST Card No.") + " *"} />
                                 </View>
                                 {gstCard != "" && (
                                     <View>

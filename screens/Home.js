@@ -44,6 +44,8 @@ const HomeScreen = ({ navigation }) => {
     const [orgName, setOrgName] = React.useState("");
     const [duplicateAccount, setDuplicateAccount] = React.useState([]);
 
+    const [tierUrl, setTierUrl] = React.useState("");
+
     const goBannerDetails = (dataValue) => {
         if (dataValue.open_type == 1) {
             if (Platform.OS == "android") {
@@ -133,6 +135,7 @@ const HomeScreen = ({ navigation }) => {
                     .then((responseJson) => {
                         console.log("Dashboard:", responseJson);
                         if (responseJson.bstatus == 1) {
+                            setTierUrl(responseJson.tier_url);
                             if (responseJson.have_location_info == 0) {
                                 navigation.navigate('TakeStorePicture');
                                 Events.publish('mainMenu', []);
@@ -359,7 +362,10 @@ const HomeScreen = ({ navigation }) => {
                             loop={true}
                             renderItem={renderBanner} />
                     </Box>
-                    <Box paddingY="3" paddingX="5" mt="5">
+                    <Box paddingY="3" paddingX="5">
+                        <Button onPress={() => Linking.openURL(tierUrl)} size="sm" style={{ backgroundColor: "#111111", borderRadius: 10, overflow: 'hidden' }} marginY={4}>
+                            <Text color="#ffffff" fontSize="sm" fontWeight="bold">{t("Tire Status")}</Text>
+                        </Button>
                         {duplicateAccount.length > 1 && (
                             <Stack backgroundColor={"#eeeeee"} padding={5} borderRadius={15} overflow={'hidden'} marginBottom={5}>
                                 <HStack justifyContent="center" alignItems="center" space={3}>

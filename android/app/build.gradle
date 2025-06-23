@@ -83,8 +83,8 @@ android {
         applicationId "lafarge.maitree.loyalty.lafarge"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 110200
-        versionName "11.2.0"
+        versionCode 110201
+        versionName "11.2.1"
     }
     signingConfigs {
         debug {
