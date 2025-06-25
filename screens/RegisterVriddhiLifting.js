@@ -23,6 +23,7 @@ const RegisterVriddhiLiftingScreen = ({ navigation }) => {
     const [dealer, setDealer] = React.useState("");
     const [quantity, setQuantity] = React.useState("");
     const [searchDealer, setSearchDealer] = React.useState("");
+    const [searchTerm, setSearchTerm] = React.useState("");
 
     const [pageFor, setPageFor] = React.useState("Registration");
 
@@ -159,9 +160,10 @@ const RegisterVriddhiLiftingScreen = ({ navigation }) => {
         });
     }
 
-    const onSearchDealer = (valSearch) => {
-        setSearchDealer(valSearch);
-        if (valSearch == "") {
+    const onSearchDealer = () => {
+        setSearchDealer(searchTerm);
+        setLoading(true);
+        if (searchTerm.trim() == "") {
             getDealer();
         } else {
             AsyncStorage.getItem('userToken').then(val => {
@@ -170,7 +172,7 @@ const RegisterVriddhiLiftingScreen = ({ navigation }) => {
                     formdata.append("token", JSON.parse(val).token);
                     formdata.append("APIkey", `${API_KEY}`);
                     formdata.append("orgId", JSON.parse(val).org_id);
-                    formdata.append("keyword", valSearch);
+                    formdata.append("keyword", searchTerm);
                     fetch(`${BASE_URL}/influencer_listing_by_dealer_state_id`, {
                         method: 'POST',
                         headers: {
@@ -225,8 +227,11 @@ const RegisterVriddhiLiftingScreen = ({ navigation }) => {
                     .then((responseJson) => {
                         console.log("vriddhi_sales_registration:", responseJson);
                         if (responseJson.bstatus == 1) {
-                            setLoading(false);
                             Toast.show({ description: responseJson.message });
+                            setTimeout(function () {
+                                setLoading(false);
+                                navigation.goBack();
+                            }, 1000);
                         } else {
                             Toast.show({ description: responseJson.message });
                             setTimeout(function () {
@@ -490,29 +495,29 @@ const RegisterVriddhiLiftingScreen = ({ navigation }) => {
                                                 </View>
                                             </HStack>
                                         )}
-                                        {dealer == "" && (
-                                            <HStack justifyContent={'space-between'} alignItems={'center'}>
+                                        <HStack justifyContent={'space-between'} alignItems={'center'}>
                                                 <Text style={{ width: '20%' }} fontSize='sm' fontWeight="bold" color={colorTheme.dark}>{t("Influencer")}</Text>
                                                 <View style={[styles.inputbox, { width: '78%' }]}>
-                                                    <Input size="md" onChangeText={(text) => onSearchDealer(text)} variant="unstyled" InputLeftElement={<Icon name="search-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 15, textAlign: 'center' }} />} placeholder={t("Search Influencer")} />
+                                                    <Input size="md" onChangeText={(text) => setSearchTerm(text)} variant="unstyled" InputLeftElement={<Icon name="person-outline" size={20} color="#666666" style={{ width: 25, marginLeft: 15, textAlign: 'center' }} />} InputRightElement={<Button onPress={() => onSearchDealer()} backgroundColor={"#111111"}><Icon name="search-outline" size={20} color="#ffffff" style={{ width: 25, textAlign: 'center' }} /></Button>} placeholder={t("Search Influencer")} />
                                                 </View>
                                             </HStack>
-                                        )}
                                         {searchDealer != "" && (
                                             <VStack space={2} style={[styles.productbox, { backgroundColor: "#ffffff" }]}>
                                                 {dealerList.length == 0 && (
                                                     <VStack borderColor={"#cccccc"} borderWidth={1} borderRadius={12} alignItems="center" w="100%" padding={1}>
                                                         <Text color="#666666" fontSize="sm">
-                                                        {t("--- No Dealer Found ---")}
-                                                        
+                                                            {t("--- No Dealer Found ---")}
+
                                                         </Text>
                                                     </VStack>
                                                 )}
                                                 {dealerList.map((item, index) =>
-                                                    <VStack key={index} borderColor={"#cccccc"} borderWidth={1} borderRadius={12} alignItems="center" w="100%" padding={1}>
-                                                        <Text color={colorTheme.dark} fontSize="md" fontWeight="bold">{item.value}</Text>
-                                                        <Text color="#666666" fontSize="sm">{item.mobile}</Text>
-                                                    </VStack>
+                                                    <Pressable key={index} onPress={() => setDealer(item.id)}>
+                                                        <VStack borderColor={dealer == item.id ? colorTheme.dark : "#cccccc"} backgroundColor={dealer == item.id ? colorTheme.light : "#ffffff"} borderWidth={1} borderRadius={12} alignItems="center" w="100%" padding={1}>
+                                                            <Text color={colorTheme.dark} fontSize="md" fontWeight="bold">{item.value}</Text>
+                                                            <Text color="#666666" fontSize="sm">{item.mobile}</Text>
+                                                        </VStack>
+                                                    </Pressable>
                                                 )}
                                             </VStack>
                                         )}
@@ -621,7 +626,7 @@ const RegisterVriddhiLiftingScreen = ({ navigation }) => {
                                                             {item.is_verified == 0 && item.has_exception == 0 && (
                                                                 <VStack bg="#eeeeee" borderRadius={10} padding={2} overflow="hidden" marginTop={2}>
                                                                     <Text fontSize='sm' color="#111111" textAlign="center">
-                                                                         {t("Quantity Sold in")}{item.unit_name}</Text>
+                                                                        {t("Quantity Sold in")}{item.unit_name}</Text>
                                                                     <HStack padding="2" justifyContent="space-between" alignItems="center">
                                                                         <View style={[styles.inputbox, { width: '60%' }]}>
                                                                             <Input size="sx" keyboardType='number-pad' height={35} onChangeText={(text) => setNewQuantity(text)} variant="unstyled" placeholder={t("Enter Quantity")} />

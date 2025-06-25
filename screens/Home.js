@@ -362,10 +362,10 @@ const HomeScreen = ({ navigation }) => {
                             loop={true}
                             renderItem={renderBanner} />
                     </Box>
-                    <Box paddingY="3" paddingX="5">
-                        <Button onPress={() => Linking.openURL(tierUrl)} size="sm" style={{ backgroundColor: "#111111", borderRadius: 10, overflow: 'hidden' }} marginY={4}>
-                            <Text color="#ffffff" fontSize="sm" fontWeight="bold">{t("Tire Status")}</Text>
-                        </Button>
+                    <Box paddingY="3" paddingX="5" marginTop={5}>
+                        {/* <Button onPress={() => Linking.openURL(tierUrl)} size="sm" style={{ backgroundColor: "#111111", borderRadius: 10, overflow: 'hidden' }} marginY={4}>
+                            <Text color="#ffffff" fontSize="sm" fontWeight="bold">{t("Tier Status")}</Text>
+                        </Button> */}
                         {duplicateAccount.length > 1 && (
                             <Stack backgroundColor={"#eeeeee"} padding={5} borderRadius={15} overflow={'hidden'} marginBottom={5}>
                                 <HStack justifyContent="center" alignItems="center" space={3}>
