@@ -235,7 +235,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <Icon name="chevron-forward" size={26} color="#999999" />
                             </HStack>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.listview} onPress={() => navigation.navigate('GiftVouchers')}>
+                        <TouchableOpacity style={styles.listview} onPress={() => navigation.navigate('MyGiftVouchers')}>
                             <HStack justifyContent="space-between" alignItems="center" w="100%" padding={2}>
                                 <Text color="#111111" fontSize="md" textAlign="center" fontWeight="medium">{t("Gift Vouchers")}</Text>
                                 <Icon name="chevron-forward" size={26} color="#999999" />

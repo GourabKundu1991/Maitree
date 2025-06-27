@@ -178,7 +178,7 @@ const OtpScreen = ({ navigation }) => {
                                     {!otpVerification ?
                                         <VStack alignItems="center" justifyContent="center" style={{ width: '100%' }}>
                                             <Text my={2} fontSize="lg" fontWeight="bold" color="#222222" style={{ textTransform: 'uppercase' }}>{t("OTP Login")}</Text>
-                                            <Text textAlign="center" fontSize="sm" fontWeight="normal" color="#888888" mb={2}>{t("Please enter your Registered Phone Number to farther continue")}...</Text>
+                                            <Text textAlign="center" fontSize="sm" fontWeight="normal" color="#888888" mb={2}>{t("Please enter your Registered Phone Number to further continue")}...</Text>
                                             <Stack space={3} style={{ width: '100%', marginVertical: 20 }}>
                                                 <View style={styles.inputbox}>
                                                     <Input size="lg" keyboardType='number-pad' maxLength={10} onChangeText={(text) => setPhoneNum(text)} variant="unstyled" InputLeftElement={<Icon name="phone-portrait-outline" size={20} color="#f04e23" style={{ width: 25, marginLeft: 10, textAlign: 'center' }} />} placeholder={t("Phone Number") + " *"} />

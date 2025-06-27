@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Box, Button, HStack, NativeBaseProvider, Stack, Text, Toast, VStack } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity, StatusBar, View, Image, PermissionsAndroid } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity, StatusBar, View, Image, PermissionsAndroid, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { API_KEY, BASE_URL } from '../auth_provider/Config';
 import { useTranslation } from 'react-i18next';
@@ -106,6 +106,7 @@ const TakeStorePictureScreen = ({ navigation }) => {
     }
 
     const onTakeImage = () => {
+        setLoading(true);
         launchCamera(
             {
                 mediaType: 'photo',
@@ -156,12 +157,22 @@ const TakeStorePictureScreen = ({ navigation }) => {
                     .then((responseJson) => {
                         console.log("store_location_info:", responseJson);
                         if (responseJson.bstatus == 1) {
-                            Toast.show({ description: responseJson.message });
-                            setTimeout(function () {
+                            Alert.alert(
+                                responseJson.status,
+                                responseJson.message,
+                                [
+                                    {
+                                        text: t("Ok"), onPress: () => {
+                                            navigation.goBack();
+                                        }
+                                    }
+                                ],
+                            );
+                            setLoading(false);
+                            /* setTimeout(function () {
                                 setLoading(false);
                                 navigation.goBack();
-                            }, 1000);
-                            setContentSpot(responseJson.content_spot_details.content_spot_contents);
+                            }, 1000); */
                         } else {
                             Toast.show({ description: responseJson.message });
                             setTimeout(function () {
@@ -175,7 +186,7 @@ const TakeStorePictureScreen = ({ navigation }) => {
                     })
                     .catch((error) => {
                         setLoading(false);
-                        //console.log("store_location_info Error:", error);
+                        console.log("store_location_info Error:", error);
                         Toast.show({ description: t("Sorry! Somthing went Wrong. Maybe Network request Failed") });
                     });
             } else {
